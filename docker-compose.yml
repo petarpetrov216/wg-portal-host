@@ -1,0 +1,31 @@
+services:
+  wireguard-vm:
+    image: petar/ubuntu-systemd:wireguard
+    container_name: wireguard-vm
+    privileged: true
+    hostname: wg-vm
+    restart: unless-stopped
+    cap_add:
+      - SYS_ADMIN
+    security_opt:
+      - seccomp=unconfined
+    networks:
+      macvlan178:
+        ipv4_address: 192.168.178.195
+    volumes:
+      - wg-etc:/etc/wireguard
+      - wg-portal-data:/opt/wg-portal/data
+      - /lib/modules:/lib/modules:ro
+      - /sys/fs/cgroup:/sys/fs/cgroup:rw
+    stdin_open: true
+    tty: true
+    command: /sbin/init
+
+volumes:
+  wg-etc:
+  wg-portal-data:
+
+networks:
+  macvlan178:
+    external: true
+
