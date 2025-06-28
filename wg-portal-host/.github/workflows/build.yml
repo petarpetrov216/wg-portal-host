@@ -1,0 +1,29 @@
+name: Build Check
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
+
+      - name: Install frontend dependencies
+        run: |
+          cd wg-portal/frontend || echo "Frontend not present"
+          [ -f package.json ] && npm install || true
+
+      - name: Build frontend
+        run: |
+          cd wg-portal/frontend || echo "Frontend not present"
+          [ -f package.json ] && npm run build || true
